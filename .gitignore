@@ -11,6 +11,9 @@ wheels/
 
 # MLflow
 /deploy/mlflow/mlflow_data
+mlflow.db
+/mlruns
+
 
 *.pkl
 
