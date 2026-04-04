@@ -160,10 +160,12 @@ def main(args):
         for k,v in deps.items():
             client.set_registered_model_tag(model_name,k,v)
         
-        #Save model locally
+        #Save model and features locally
 
         save_path=f"{args.models_dir}/trained/{model_name}.pkl"
+        save_path_features=f"{args.models_dir}/trained/features.pkl"
         joblib.dump(model,save_path)
+        joblib.dump(model_cfg["feature_sets"]["rfe"],save_path_features)
         logger.info(f"Saved trained model to: {save_path}")
         logger.info(f"Final MAE: {mae:.4f}, R2: {r2:4f}")
 
