@@ -114,4 +114,4 @@ jobs:
         
       - name: Cleaning up MLflow
         run: |
-          docker compose down --rmi all
+          docker compose -f deploy/mlflow/compose.yaml down --rmi all
