@@ -1,0 +1,66 @@
+name: MLOps Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_all:
+        description: 'Run all jobs'
+        required: false
+        default: 'true'
+      run_data_processing:
+        description: 'Run data processing job'
+        required: false
+        default: 'false'
+      run_model_training:
+        description: 'Run model training job'
+        required: false
+        default: 'false'
+      run_build_and_publish:
+        description: 'Run build and publish job'
+        required: false
+        default: 'false'
+  release:
+    types: [created]
+         
+jobs:
+  data-processing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.5'
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8
+      
+      - name: Install dependencies
+        run: uv sync --group core --frozen --no-install-project
+      
+      - name: Run data processing
+        run: |
+          uv run src/data/data_processor.py \
+          --input data/raw/house_data.csv \
+          --output data/processed/cleaned_house_data.csv
+      
+      - name: Run feature engineering
+        run: |
+          uv run src/features/features.py \
+          --input data/processed/cleaned_house_data.csv \
+          --output data/processed/featured_house_data.csv \
+          --preprocessor models/trained/preprocessor.pkl
+      
+      - name: Upload processed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-data
+          path: data/processed/featured_house_data.csv
+      
+      - name: Upload proprocessor
+        uses: actions/upload-artifact@v4
+        with:
+          name: preprocessor
+          path: models/trained/preprocessor.pkl
