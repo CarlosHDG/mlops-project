@@ -41,7 +41,7 @@ jobs:
       
       - name: Run data processing
         run: |
-          uv run src/data/data_processor.py \
+          uv run --no-sync src/data/data_processor.py \
           --input data/raw/house_data.csv \
           --output data/processed/cleaned_house_data.csv
       
