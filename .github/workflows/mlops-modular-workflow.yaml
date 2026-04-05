@@ -63,3 +63,56 @@ jobs:
         with:
           name: preprocessor
           path: models/trained/preprocessor.pkl
+  
+  model-training:
+    needs: data-processing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.5'
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.0.0   
+      
+      - name: Install dependencies
+        run: uv sync --no-default-groups --group core --group training --frozen --no-install-project
+
+      - name: Download processed data
+        uses: actions/download-artifact@v4
+        with:
+          name: processed-data
+          path: data/processed
+      
+      - name: Sepup MLflow
+        run: |
+          docker compose up -d
+      
+      - name: Wait for MLflow to start
+        run: |
+          for i in {1..10}; do
+            curl -f http://localhos:5000/health || sleep 5;
+          done
+      
+      - name: Train model
+        run: |
+          uv run --no-sync src/models/train_model.py \
+          --config configs/model_config.yaml \
+          --data data/processed/featured_house_data.csv \
+          --models-dir models \
+          --mlflow-tracking-uri http://localhost:5000/health
+
+      - name: Upload trained model
+        uses: actions/upload-artifact@v4
+        with:
+            name: trained-model
+            path: models/
+        
+      - name: Cleaning up MLflow
+        run: |
+          docker compose down --rmi all
+          
