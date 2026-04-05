@@ -47,7 +47,7 @@ jobs:
       
       - name: Run feature engineering
         run: |
-          uv run src/features/features.py \
+          uv run --no-sync src/features/features.py \
           --input data/processed/cleaned_house_data.csv \
           --output data/processed/featured_house_data.csv \
           --preprocessor models/trained/preprocessor.pkl
