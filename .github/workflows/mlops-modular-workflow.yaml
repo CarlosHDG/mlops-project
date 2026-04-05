@@ -90,7 +90,7 @@ jobs:
       
       - name: Sepup MLflow
         run: |
-          docker compose up -d
+          docker compose -f deploy/mlflow/compose.yaml up -d
       
       - name: Wait for MLflow to start
         run: |
@@ -115,4 +115,3 @@ jobs:
       - name: Cleaning up MLflow
         run: |
           docker compose down --rmi all
-          
