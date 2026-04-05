@@ -17,6 +17,7 @@ import yaml
 import platform
 import sklearn
 import joblib
+from pathlib import Path
 
 #Logging
 logging.basicConfig(level=logging.INFO,format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -164,6 +165,7 @@ def main(args):
 
         save_path=f"{args.models_dir}/trained/{model_name}.pkl"
         save_path_features=f"{args.models_dir}/trained/features.pkl"
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
         joblib.dump(model,save_path)
         joblib.dump(model_cfg["feature_sets"]["rfe"],save_path_features)
         logger.info(f"Saved trained model to: {save_path}")
