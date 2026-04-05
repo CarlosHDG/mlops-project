@@ -7,6 +7,7 @@ from sklearn.compose import ColumnTransformer
 import logging
 from datetime import datetime
 import joblib
+from pathlib import Path
 
 
 logging.basicConfig(level=logging.INFO,format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -67,6 +68,7 @@ def run_feature_engineering(input_file:str,output_file:str,preprocessor_output_p
     colums_name=preprocessor.get_feature_names_out()
     logger.info(f"New columns features are \n {colums_name}")
     #Save preprocessor
+    Path(preprocessor_output_path).parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(preprocessor,preprocessor_output_path)
     logger.info(f"Saved preprocessor to {preprocessor_output_path}")
 
