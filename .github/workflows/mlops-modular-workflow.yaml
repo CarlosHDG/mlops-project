@@ -149,6 +149,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.api
+          push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
