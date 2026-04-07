@@ -142,7 +142,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
-          pasSword: ${{ secrets.DOCKERHUB_TOKEN}}
+          pasSword: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v7
