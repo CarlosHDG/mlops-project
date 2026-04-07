@@ -150,8 +150,8 @@ jobs:
           context: .
           file: ./Dockerfile.api
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/house-price-model:${{ github.sha }}
-            ${{ vars.DOCKERHUB_USERNAME }}/house-price-model:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
           cache-from: type+gha
           cache-to: type=gha, mode=max
 
