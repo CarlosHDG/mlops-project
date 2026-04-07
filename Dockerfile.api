@@ -1,6 +1,6 @@
 #STAGE 1 Builder
 FROM python:3.13-slim AS builder
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.9.18 /uv /uvx /bin/
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --no-default-groups --group core --group api --frozen --no-install-project
@@ -8,7 +8,7 @@ RUN uv sync --no-default-groups --group core --group api --frozen --no-install-p
 #STAGE 2 
 FROM python:3.13-slim AS runtime
 WORKDIR /app
-COPY --from=builder /root/.local/bin/uv /user/local/bin/uv
+COPY --from=builder /bin/uv /usr/local/bin/uv
 COPY --from=builder /app/.venv /app/.venv
 
 COPY src/ ./src/
